@@ -19,3 +19,8 @@ This project was developed as my Final Year Project (FYP) using ROS1. It focuses
    mkdir -p ~/catkin_ws/src
    cd ~/catkin_ws
    catkin_make
+   cd ~/catkin_ws/src
+git clone <your-repo-url>
+
+rosdep install --from-paths src --ignore-src -r -y
+
