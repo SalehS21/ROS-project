@@ -1,0 +1,13 @@
+<launch>
+    <!-- Start move_base -->
+    <node pkg="move_base" type="move_base" name="move_base" output="screen">
+        <!-- Load costmap parameters -->
+        <rosparam file="$(find navigation_maps)/config/global_costmap_params.yaml" command="load"/>
+        <rosparam file="$(find navigation_maps)/config/local_costmap_params.yaml" command="load"/>
+        <rosparam file="$(find navigation_maps)/config/base_local_planner.yaml" command="load"/>
+
+        <!-- Set the global and local planners -->
+        <param name="base_global_planner" value="navfn/NavfnROS"/>
+        <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS"/>
+    </node>
+</launch>

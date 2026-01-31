@@ -1,0 +1,39 @@
+<launch>
+    <!-- Start AMCL (Adaptive Monte Carlo Localization) -->
+    <node name="amcl" pkg="amcl" type="amcl" output="screen">
+        <!-- Use the map from map_server -->
+        <param name="use_map_topic" value="true"/>
+
+        <!-- Particle filter parameters -->
+        <param name="min_particles" value="500"/>
+        <param name="max_particles" value="5000"/>
+        <param name="update_min_d" value="0.2"/>
+        <param name="update_min_a" value="0.1"/>
+
+        <!-- Adjusted parameters for LiDAR-only navigation -->
+        <param name="odom_frame_id" value="map"/>  <!-- No odom, use map frame -->
+        <param name="base_frame_id" value="base_link"/>
+        <param name="global_frame_id" value="map"/>
+        
+        <!-- No odometry model needed -->
+        <param name="odom_model_type" value="diff"/>  <!-- Can also try "omni" -->
+        <param name="transform_tolerance" value="0.5"/>
+        <param name="resample_interval" value="1"/>
+        
+        <!-- Sensor model (Laser scan matching) -->
+        <param name="laser_min_range" value="0.1"/>
+        <param name="laser_max_range" value="10.0"/>
+        <param name="laser_max_beams" value="180"/>
+        <param name="laser_z_hit" value="0.95"/>
+        <param name="laser_z_short" value="0.1"/>
+        <param name="laser_z_max" value="0.05"/>
+        <param name="laser_z_rand" value="0.05"/>
+        <param name="laser_sigma_hit" value="0.2"/>
+        <param name="laser_lambda_short" value="0.1"/>
+        <param name="laser_lambda_max" value="0.05"/>
+
+        <!-- AMCL publishes estimated pose -->
+        <remap from="scan" to="/scan"/>
+        <remap from="amcl_pose" to="/amcl_pose"/>
+    </node>
+</launch>

@@ -1,0 +1,58 @@
+<launch>
+    <!-- 1️⃣ Start HLDS LiDAR -->
+    <include file="$(find hls_lfcd_lds_driver)/launch/hlds_laser.launch"/>
+    
+    <node pkg="navigation_maps" type="arduino_motor_controller.py" name="arduino_motor_control" output="screen"/>
+      
+
+    <!-- 2️⃣ Load the Saved Map -->
+    <node name="map_server" pkg="map_server" type="map_server" args="$(find navigation_maps)/maps/box_map.yaml" />
+
+    <!-- 3️⃣ AMCL Localization (Publishes map → odom) -->
+    <node name="amcl" pkg="amcl" type="amcl" output="screen">
+        <param name="use_map_topic" value="true"/>
+        <param name="odom_frame_id" value="odom"/>  <!-- AMCL publishes map → odom -->
+        <param name="base_frame_id" value="base_link"/>
+        <param name="global_frame_id" value="map"/>
+        <param name="tf_broadcast" value="true"/>
+    </node>
+
+    <!-- 4️⃣ Laser Scan Matcher (Publishes odom → base_link) -->
+    <node pkg="laser_scan_matcher" type="laser_scan_matcher_node" name="scan_matcher" output="screen">
+        <remap from="scan" to="/scan"/>  <!-- Ensure this matches your LiDAR topic -->
+        
+        <!-- Frame Configurations -->
+        <param name="fixed_frame" value="odom"/>  <!-- Change from odom to map -->
+        <param name="base_frame" value="base_link"/>
+        <param name="odom_frame" value="odom"/>
+
+        <!-- Publishes odom -> base_link (DYNAMIC) -->
+        <param name="publish_tf" value="true"/>
+
+        <!-- Improve stability for LiDAR-only systems -->
+        <param name="use_corr_tran" value="true"/>
+        <param name="use_corr_rot" value="true"/>
+
+        <!-- Speed and acceleration limits (optional) -->
+        <param name="kf_dist_linear" value="0.05"/>
+        <param name="kf_dist_angular" value="0.05"/>
+    </node>
+
+    <!-- 5️⃣ Move Base for Navigation -->
+    
+  <arg name="cmd_vel_topic" default="/cmd_vel" />
+  <arg name="odom_topic" default="odom" />
+  <arg name="move_forward_only" default="false"/>
+
+  <!-- move_base -->
+    <node name="move_base" pkg="move_base" type="move_base" output="screen">
+        <rosparam file="$(find navigation_maps)/config/move_base_params.yaml" command="load"/>
+        <rosparam file="$(find navigation_maps)/config/costmap_common_params.yaml" command="load"/>
+        <rosparam file="$(find navigation_maps)/config/local_costmap_params.yaml" command="load"/>
+        <rosparam file="$(find navigation_maps)/config/global_costmap_params.yaml" command="load"/>
+        <rosparam file="$(find navigation_maps)/config/dwa_local_planner_params.yaml" command="load"/>
+  </node>      
+    <!-- 6️⃣ Static Transform for LiDAR Mounting (base_link → laser) -->
+    <node pkg="tf" type="static_transform_publisher" name="laser_to_base_link"
+          args="0 0 0 0 0 -3.14 base_link laser 100"/>
+</launch>

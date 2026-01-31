@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>navigation_maps</name>
+  <version>0.1.0</version>
+  <description>The navigation_maps package for autonomous robot navigation</description>
+  <maintainer email="your_email@example.com">Your Name</maintainer>
+  <license>BSD</license>
+
+  <!-- Dependencies -->
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <!-- ROS Core Dependencies -->
+  <depend>roscpp</depend>
+  <depend>rospy</depend>
+  <depend>std_msgs</depend>
+
+  <!-- Navigation Stack -->
+  <depend>move_base</depend>
+  <depend>amcl</depend>
+  <depend>map_server</depend>
+  <depend>tf</depend>
+  <depend>tf2_ros</depend>
+  <depend>costmap_2d</depend>
+  <depend>nav_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>actionlib</depend>
+  <depend>actionlib_msgs</depend>
+
+  <!-- Visualization & Debugging -->
+  <depend>rviz</depend>
+
+  <!-- Additional Dependencies -->
+  <depend>dynamic_reconfigure</depend>
+  <depend>message_generation</depend>
+  <depend>message_runtime</depend>
+  
+  <exec_depend>python3</exec_depend>
+  <exec_depend>python3-pyfirmata</exec_depend>
+
+  <export>
+    <build_type>catkin</build_type>
+  </export>
+</package>

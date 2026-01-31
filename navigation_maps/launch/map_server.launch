@@ -1,0 +1,4 @@
+<launch>
+    <!-- Start Map Server -->
+    <node name="map_server" pkg="map_server" type="map_server" args="$(find navigation_maps)/maps/box_map.yaml" />
+</launch>
