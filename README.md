@@ -24,3 +24,14 @@ git clone <your-repo-url>
 
 rosdep install --from-paths src --ignore-src -r -y
 
+project structure
+catkin_ws/
+├── src/
+│   └── my_robot_nav/
+│       ├── src/        # C++ nodes
+│       ├── scripts/    # Python nodes (e.g., goal sender)
+│       ├── launch/     # Launch files (simulation, navigation)
+│       ├── config/     # Costmap and planner configuration files
+│       ├── maps/       # Generated maps from SLAM
+│       └── README.md
+
