@@ -1,0 +1,4 @@
+  <launch>
+    <node pkg="motor_control" type="motor_control.py" name="motor_control" output="screen"/>
+    <node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop" output="screen"/>
+  </launch>
